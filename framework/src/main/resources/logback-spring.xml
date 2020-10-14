@@ -31,7 +31,7 @@
 
 	<!-- 级别从低到高：TRACE、DEBUG、INFO、WARN、ERROR；打印等于或高于本级别的日志 -->
 	<logger name="org.springframework" level="INFO" />
-	<logger name="studio.rockpile.springcloud" level="DEBUG" />
+	<logger name="studio.rockpile.application" level="DEBUG" />
 
 	<root level="ERROR">
 		<appender-ref ref="CONSOLE" />

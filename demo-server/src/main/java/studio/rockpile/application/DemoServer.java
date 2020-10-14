@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 // 指定端口启动
 // java -Xms128m -Xmx128m -Dserver.port=53012 -jar demo-server.jar --spring.config.additional-location=/opt/rockpile/server/demo/conf/
@@ -15,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 // 启动sentinel
 // java -Xms128m -Xmx128m -Dlogging.file=./log/sentinel-dash.log -jar sentinel-dashboard-1.7.0.jar
 @SpringBootApplication
+@EnableDiscoveryClient
 @MapperScan("studio.rockpile.application.**.dao*")
 public class DemoServer implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(DemoServer.class);
