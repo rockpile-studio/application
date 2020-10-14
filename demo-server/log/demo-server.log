@@ -1,0 +1,8 @@
+2020-10-14 15:14:02.538  INFO 14344 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1438 ms
+2020-10-14 15:14:04.066  INFO 14344 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-10-14 15:14:04.988  INFO 14344 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 55023 (http) with context path '/demo'
+2020-10-14 15:14:05.305  INFO 14344 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'
+2020-10-14 15:14:24.636  INFO 15956 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1230 ms
+2020-10-14 15:14:26.150  INFO 15956 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-10-14 15:14:27.022  INFO 15956 --- [main] o.s.b.w.e.u.UndertowServletWebServer     : Undertow started on port(s) 55060 (http) with context path '/demo'
+2020-10-14 15:14:27.324  INFO 15956 --- [SpringContextShutdownHook] o.s.s.concurrent.ThreadPoolTaskExecutor  : Shutting down ExecutorService 'applicationTaskExecutor'

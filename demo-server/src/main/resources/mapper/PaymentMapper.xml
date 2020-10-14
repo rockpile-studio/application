@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="studio.rockpile.application.server.demo.dao.PaymentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="studio.rockpile.application.model.entity.Payment">
+        <id column="id" property="id" />
+        <result column="order_id" property="orderId" />
+        <result column="amount" property="amount" />
+        <result column="remark" property="remark" />
+        <result column="pay_time" property="payTime" />
+        <result column="is_fallback" property="isFallback" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, order_id, amount, remark, pay_time, is_fallback
+    </sql>
+
+</mapper>
