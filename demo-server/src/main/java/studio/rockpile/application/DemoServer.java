@@ -7,11 +7,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//指定端口启动
-//java -Xms128m -Xmx128m -Dserver.port=53012 -jar demo-server.jar --spring.config.additional-location=/opt/rockpile/server/demo/conf/
-//在conf目录下配置当前微服务固有配置application-runtime.properties
-//启动sentinel
-//java -Xms128m -Xmx128m -Dlogging.file=./log/sentinel-dash.log -jar sentinel-dashboard-1.7.0.jar
+// 指定端口启动
+// java -Xms128m -Xmx128m -Dserver.port=53012 -jar demo-server.jar --spring.config.additional-location=/opt/rockpile/server/demo/conf/
+// 在conf目录下配置当前微服务固有配置application-runtime.properties
+// 启动nacos：运行nacos-server-1.1.4/bin目录下startup.sh（startup.cmd）
+// 运行成功后，直接访问 http://127.0.0.1:8848/nacos（默认账号/密码：nacos/nacos）
+// 启动sentinel
+// java -Xms128m -Xmx128m -Dlogging.file=./log/sentinel-dash.log -jar sentinel-dashboard-1.7.0.jar
 @SpringBootApplication
 @MapperScan("studio.rockpile.application.**.dao*")
 public class DemoServer implements CommandLineRunner {
