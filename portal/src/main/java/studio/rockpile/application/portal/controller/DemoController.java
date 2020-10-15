@@ -12,19 +12,28 @@ import studio.rockpile.application.framework.protocol.CommonResult;
 import studio.rockpile.application.framework.util.SpringContextUtil;
 
 @RestController
-@RequestMapping("/demo/rest")
-public class DemoRestController {
-	private final Logger logger = LoggerFactory.getLogger(DemoRestController.class);
-	
+@RequestMapping("/demo")
+public class DemoController {
+	private final Logger logger = LoggerFactory.getLogger(DemoController.class);
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	// 测试restTemplate是否负载均衡
-	// http://127.0.0.1:53001/portal/demo/rest/payment/info
-	@RequestMapping(value = "/payment/info", method = RequestMethod.GET)
-	public CommonResult<?> paymentInfo() {
+	// http://127.0.0.1:53001/portal/demo/rest/info
+	@RequestMapping(value = "/rest/info", method = RequestMethod.GET)
+	public CommonResult<?> svrInfoByRest() {
 		String url = SpringContextUtil.getProperty("nacos.service.url.demo") + "/payment/server/info";
 		logger.debug("... url : {}", url);
 		return restTemplate.getForObject(url, CommonResult.class);
+	}
+
+	// http://127.0.0.1:53001/portal/demo/flow/limit
+	@RequestMapping(value = "/flow/limit", method = RequestMethod.GET)
+	public CommonResult<?> flowLimit() {
+		StringBuilder message = new StringBuilder("application.name=");
+		message.append(SpringContextUtil.getProperty("spring.application.name")).append(",sentinel.transport.port=");
+		message.append(SpringContextUtil.getProperty("spring.cloud.sentinel.transport.port")).append(")");
+		return CommonResult.succ(message.toString());
 	}
 }
