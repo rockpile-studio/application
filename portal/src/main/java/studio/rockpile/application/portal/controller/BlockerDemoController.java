@@ -31,6 +31,15 @@ public class BlockerDemoController {
 		return CommonResult.succ(message.toString());
 	}
 
+	// nacos持久化sentinel配置数据：
+	// [{"resource":"testResourceLimit","limitApp":"default","grade":1,"count":1,"strategy":0,"controlBehavior":0,"clusterMode":false}]
+	// # resource：资源名称
+	// # limitApp：应用来源 default
+	// # grade：阈值类型，0-线程数 1-QPS
+	// # count：单机阈值
+	// # strategy：流控模式，0-直接 1-关联 2-链路
+	// # controlBehavior：流控效果，0-快速失败 1-WarmUp 2排队等待
+	// # clusterMode：是否集群
 	public CommonResult<?> blockResourceLimit(String arg1, String arg2, BlockException exception) {
 		StringBuilder message = new StringBuilder("资源限流服务，param1=");
 		message.append(arg1).append("，param2=").append(arg2);

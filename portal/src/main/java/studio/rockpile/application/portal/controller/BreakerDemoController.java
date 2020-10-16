@@ -35,6 +35,6 @@ public class BreakerDemoController {
 
 	public CommonResult<?> handleFallback(@RequestParam(value = "orderId", required = true) String orderId,
 			Throwable exception) {
-		return CommonResult.error(500, "未查询到订单id对应的付款流水信息，业务异常熔断处理", null);
+		return CommonResult.error(500, "未查询到订单id对应的付款流水信息，业务异常降级处理", null);
 	}
 }

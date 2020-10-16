@@ -16,7 +16,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 // 启动sentinel：java -Xms128m -Xmx128m -Dlogging.file=./log/sentinel-dash.log -jar sentinel-dashboard-1.7.0.jar
 // 运行成功后，直接访问 http://127.0.0.1:8080（默认账号/密码：sentinel/sentinel）
 @SpringBootApplication
-@EnableDiscoveryClient
+@EnableDiscoveryClient  
 @MapperScan("studio.rockpile.application.**.dao*")
 public class DemoServer implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(DemoServer.class);
