@@ -57,7 +57,7 @@ public class MyBatisPlusGenerator {
 			}
 		});
 
-		String[] tableNames = { "t_payment" };
+		String[] tableNames = { "t_account", "t_order", "t_dict" };
 
 		StrategyConfig strategyConf = new StrategyConfig();
 		strategyConf.setNaming(NamingStrategy.underline_to_camel);
