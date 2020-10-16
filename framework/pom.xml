@@ -103,7 +103,12 @@
 			<groupId>com.alibaba.cloud</groupId>
 			<artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
 		</dependency>
-		
+		<!-- sentinel热点限流依赖 -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.alibaba.csp</groupId> -->
+		<!-- <artifactId>sentinel-parameter-flow-control</artifactId> -->
+		<!-- </dependency> -->
+
 		<!-- sentinel持久化 -->
 		<dependency>
 			<groupId>com.alibaba.csp</groupId>

@@ -28,6 +28,7 @@ public class PaymentController {
 	@Value("${nacos.config.info}")
 	private String info;
 
+	// http://127.0.0.1:53011/payment/server/info
 	@RequestMapping(value = "/server/info", method = RequestMethod.GET)
 	public CommonResult<?> serverPort() {
 		StringBuilder result = new StringBuilder("server(");
