@@ -35,7 +35,7 @@ create table t_dict (
 
 alter table t_dict comment '字典信息';
 
--- 水平分库：在dbnode1 dbnode2数据库实例中均创建t_account
+-- 水平分库：在mystudio数据库实例中均创建t_account
 create table t_account (
   account_id	bigint not null comment '账户id',
   fullname		varchar(32) not null comment '账户名',
