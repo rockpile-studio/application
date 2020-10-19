@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.jasypt.encryption.StringEncryptor;
-import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import studio.rockpile.application.DemoServer;
-import studio.rockpile.application.framework.util.SimpleEncryptor;
-import studio.rockpile.application.framework.util.SpringContextUtil;
 import studio.rockpile.application.model.entity.Payment;
 import studio.rockpile.application.server.demo.provider.PaymentProvider;
 
