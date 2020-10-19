@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.jasypt.encryption.StringEncryptor;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import studio.rockpile.application.DemoServer;
+import studio.rockpile.application.framework.util.SimpleEncryptor;
+import studio.rockpile.application.framework.util.SpringContextUtil;
 import studio.rockpile.application.model.entity.Payment;
 import studio.rockpile.application.server.demo.provider.PaymentProvider;
 
@@ -22,6 +26,20 @@ import studio.rockpile.application.server.demo.provider.PaymentProvider;
 public class ServiceCallDemo {
 	@Autowired
 	private PaymentProvider paymentProvider;
+	
+	@Autowired
+	private StringEncryptor encryptor;
+
+	// 部署时，设置/etc/profile，export JASYPT_PASSWORD = lCs1T3aOxWQU2jWZw
+	// java -Xms128m -Xmx128m -Djasypt.encryptor.password=lCs1T3aOxWQU2jWZw -jar demo-server.jar
+	// jasypt同一个密钥（secretKey）对同一个内容执行加密，每次生成的密文都是不一样的，但是根据密文解密成原内容都是一致的
+	@Test
+	public void envPasswordEncryptor() {
+		String username = "rockpile";
+		String password = "rockpile";
+		System.out.println("username : " + encryptor.encrypt(username));
+		System.out.println("password : " + encryptor.encrypt(password));
+	}
 
 	@Test
 	public void test() {

@@ -1,0 +1,80 @@
+****** 绑定表 ******
+绑定表是指分片规则一致的主表和子表，
+如：t_order和t_order_item均按照order_id分片，绑定表之间的分区键完全一致，则两张表互为绑定关系
+绑定表之间的多表关联查询不会出现笛卡尔积关联，关联效率大大提升。
+使用ShardingJDBC时，t_order表的主键字段一般定义为order_id（而不使用id字段），保证与t_order_item的分区键一致
+
+例如：逻辑sql如下
+select * from t_order a join t_order_item b on a.order_id = b.order_id where a.order_id in (10, 11);
+在不配置绑定表关系时，shardingJDBC路由后的实际sql为：
+select * from t_order_1 a join t_order_item_1 b on a.order_id = b.order_id where a.order_id in (10, 11);
+select * from t_order_1 a join t_order_item_2 b on a.order_id = b.order_id where a.order_id in (10, 11);
+select * from t_order_2 a join t_order_item_1 b on a.order_id = b.order_id where a.order_id in (10, 11);
+select * from t_order_2 a join t_order_item_2 b on a.order_id = b.order_id where a.order_id in (10, 11);
+
+****** 广播表 ******
+广播表是指所有的分片数据源中都存在的表，并且表结构完全一致。
+适用于数据量不大且需要与海量数据的表进行关联查询的场景，例如：字典表
+
+****** 执行模式 ******
+ShardingJDBC采用一套自动化的执行引擎，负责将路由和改写完成后的真实SQL安全且高效地发送给底层数据源执行。
+它不是简单地将SQL通过jdbc直接发送至数据源逐条执行，也并非是直接将执行请求放入线程池并发执行。
+它会关注平衡数据源连接的创建以及内存占用的消耗，最大限度地合理利用并发。
+执行引擎能在以下两种模式间自适应切换：
+1、内存限制模式：通过多线程并发处理的方式，以达到执行效率的最大化。
+2、连接限制模式：严格控制对一次操作所耗费的数据库连接数量。
+内存限制模式适用于OLAP操作，连接限制模式适用于OLTP操作，
+OLTP操作通常带有分片键，分路由到单一分片，严格控制数据库连接，以保证在线系统数据库资源的合理利用。
+
+****** 分片策略 ******
+ShardingJDBC支持以下几种分片策略
+1、standard：标准分片策略，对应StandardShardingStrategy，提供对SQL语句中的=、IN、BETWEEN..AND的分片操作支持。
+   StandardShardingStrategy只支持单分片键，提供PreciseShardingAlgorithm和RangeShardingAlgorithm两种分片算法。
+   PreciseShardingAlgorithm是必选的，用户处理=和IN的分片，RangeShardingAlgorithm可选，用于处理BETWEEN..AND分片，
+   如不配置RangeShardingAlgorithm，SQL中的BETWEEN将按照全库路由处理
+2、complex：复合分片策略，对应ComplexShardingStrategy。提供对SQL语句中的=、IN、BETWEEN..AND的分片操作支持。
+   ComplexShardingStrategy支持多分片键，由于多分片键之间的关系复杂，因此并未进行过多的封装，
+   而是直接将分片键值组合以及分片操作符透传至分片算法，完全由开发者实现。
+3、inline：行表达式分片策略，对应InlineShardingStrategy。使用Groovy表达式，提供对SQL语句中的=、IN的分片操作支持。
+   只支持单分片键，如：t_user_$->{uid % 8} 表示user表根据uid模8，分成8张表
+4、hint：Hint分片策略，对应HintShardingStrategy。通过Hint而非SQL解析的方式进行分片的策略。
+   对应分片字段非SQL决定，而由其他外置条件决定的场景，可使用SQL Hint灵活注入分片字段。
+   例如：内部系统，按员工登录主键分库，而数据库中并无此字段。
+   SQL Hint支持通过Java API和SQL注释（待实现）两种方式使用。
+5、none：不分片策略，对应NoneShardingStrategy
+
+****** 读写分离 ******
+ShardingJDBC读写分离是根据SQL语义的分析，将读操作和写操作分别路由到主库和从库。
+它提供透明化的读写分离，让使用方尽量像使用一个数据库的样子使用主从数据库集群。
+ShardingJDBC只负责读写数据的路由，而主从数据库之间的数据同步，需要另行搭建。
+ShardingJDBC提供一主多从的读写分离配置
+
+****** 弱事务 ******
+针对弱事务说明：
+1、支持非跨库事务。如：仅分表，或分库但路由结果在单库中
+2、支持因逻辑异常导致的跨库事务。如：同事务中跨两个库更新。更新完抛出空指针，则两个库的内容都能回滚。
+3、不支持因网络/硬件异常导致的跨库事务。如：同事务中跨两个库更新，更新完未提交之前，一个库死机，则只有另一库提交。
+底层逻辑代码如下：
+public abstract class AbstractConnectionAdapter extends AbstractUnsupportedOperationConnection {
+    @Override
+    public final void commit() throws SQLException {
+        Collection<SQLException> exceptions = new LinkedList<>();
+        for (Connection each : cachedConnections.values()) {
+            try {
+                each.commit();
+            } catch (final SQLException ex) {
+                exceptions.add(ex);
+            }
+        }
+        throwSQLExceptionIfNecessary(exceptions);
+    }
+}
+
+****** 柔性事务 ******
+1、SQL执行前记录日志，如果执行成功把日志删除，
+   如果执行失败重试一定次数（如果未达到最大尝试次数便执行成功，一样删除日志）。
+2. 异步任务不断扫描执行日志，如果重试次数未达到最大上限，尝试重新执行，如果执行成功删除日志。
+柔性事务的适用场景限制：SQL要满足幂等性
+1、insert语句必须包含主键，且不能是自增主键。
+2、update语句要求幂等，不能是update xxx SET x=x+1
+3、DELETE语句无要求。
