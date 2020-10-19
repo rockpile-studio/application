@@ -28,7 +28,7 @@ public class ServiceCallDemo {
 	private StringEncryptor encryptor;
 
 	// 部署时，设置/etc/profile，export JASYPT_PASSWORD = lCs1T3aOxWQU2jWZw
-	// java -Xms128m -Xmx128m -Djasypt.encryptor.password=lCs1T3aOxWQU2jWZw -jar demo-server.jar
+	// java -Xms128m -Xmx128m -Djasypt.encryptor.password=${JASYPT_PASSWORD} -jar demo-server.jar
 	// jasypt同一个密钥（secretKey）对同一个内容执行加密，每次生成的密文都是不一样的，但是根据密文解密成原内容都是一致的
 	@Test
 	public void envPasswordEncryptor() {
