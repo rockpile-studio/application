@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.util.Random;
 
-import org.jasypt.encryption.StringEncryptor;
-
 public class SimpleEncryptor {
 	private static final int RADIX = 16;
 	private static final String SEED = "0933910847463829827159347601486730416058";
