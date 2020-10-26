@@ -9,15 +9,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 
 import studio.rockpile.application.framework.protocol.CommonResult;
+import studio.rockpile.application.framework.protocol.QueryPageParam;
 import studio.rockpile.application.framework.util.SpringContextUtil;
 import studio.rockpile.application.model.entity.Payment;
 import studio.rockpile.application.server.demo.provider.PaymentProvider;
@@ -77,5 +80,16 @@ public class PaymentController {
 			throw new NullPointerException("未查询到订单id对应的付款流水信息");
 		}
 		return CommonResult.succ(list);
+	}
+	
+	// http://127.0.0.1:30101/payment/query/page/order
+	@RequestMapping(value = "/query/page/order", method = RequestMethod.POST)
+	public CommonResult<Object> queryPageByOrderId(@RequestBody(required = true) QueryPageParam<Payment> queryPage) {
+		IPage<Payment> result = paymentProvider.queryPageByOrderId(queryPage);
+
+		if (ObjectUtils.isEmpty(result.getRecords())) {
+			throw new NullPointerException("未查询到订单id对应的付款流水信息");
+		}
+		return CommonResult.succ(result);
 	}
 }

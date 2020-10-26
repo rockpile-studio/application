@@ -32,8 +32,8 @@ public class ServiceCallDemo {
 	// jasypt同一个密钥（secretKey）对同一个内容执行加密，每次生成的密文都是不一样的，但是根据密文解密成原内容都是一致的
 	@Test
 	public void envPasswordEncryptor() {
-		String username = "rockpile";
-		String password = "rockpile";
+		String username = "linewell";
+		String password = "linewell";
 		System.out.println("username : " + encryptor.encrypt(username));
 		System.out.println("password : " + encryptor.encrypt(password));
 	}
