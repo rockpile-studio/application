@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
@@ -26,7 +25,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 // 运行成功后，直接访问 http://127.0.0.1:8090（默认账号/密码：sentinel/sentinel）
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableAutoConfiguration
 @MapperScan("studio.rockpile.application.**.dao*")
 public class DemoServer implements CommandLineRunner {
 	private static final Logger logger = LoggerFactory.getLogger(DemoServer.class);
