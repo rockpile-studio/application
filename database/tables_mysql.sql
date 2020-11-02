@@ -1,7 +1,3 @@
-drop index idx1_payment on t_payment;
-
-drop table if exists t_payment;
-
 create table t_payment (
   id			bigint not null comment '支付id',
   order_id		bigint not null comment '订单id',
@@ -40,6 +36,7 @@ create table t_account (
   account_id	bigint not null comment '账户id',
   fullname		varchar(32) not null comment '账户名',
   account_type	int default 0 not null comment '账户类型',
+  balance       decimal(10,2) comment '账户余额',
   primary key (account_id)
 ) engine = innodb character set = utf8;
 

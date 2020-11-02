@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,52 +18,60 @@ import io.swagger.annotations.ApiModelProperty;
  * @since 2020-10-16
  */
 @TableName("t_account")
-@ApiModel(value="Account对象", description="账户信息")
+@ApiModel(value = "Account对象", description = "账户信息")
 public class Account implements Serializable {
 
-    private static final long serialVersionUID=1L;
+	private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "账户id")
-    @TableId(value = "account_id", type = IdType.ASSIGN_ID)
-    private Long accountId;
+	@ApiModelProperty(value = "账户id")
+	@TableId(value = "account_id", type = IdType.ASSIGN_ID)
+	private Long accountId;
 
-    @ApiModelProperty(value = "账户名")
-    private String fullname;
+	@ApiModelProperty(value = "账户名")
+	private String fullname;
 
-    @ApiModelProperty(value = "账户类型")
-    private Integer accountType;
+	@ApiModelProperty(value = "账户类型")
+	private Integer accountType;
 
+	@ApiModelProperty(value = "账户余额")
+	private BigDecimal balance;
 
-    public Long getAccountId() {
-        return accountId;
-    }
+	public Long getAccountId() {
+		return accountId;
+	}
 
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
-    }
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
 
-    public String getFullname() {
-        return fullname;
-    }
+	public String getFullname() {
+		return fullname;
+	}
 
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
+	}
 
-    public Integer getAccountType() {
-        return accountType;
-    }
+	public Integer getAccountType() {
+		return accountType;
+	}
 
-    public void setAccountType(Integer accountType) {
-        this.accountType = accountType;
-    }
+	public void setAccountType(Integer accountType) {
+		this.accountType = accountType;
+	}
 
-    @Override
-    public String toString() {
-        return "Account{" +
-        "accountId=" + accountId +
-        ", fullname=" + fullname +
-        ", accountType=" + accountType +
-        "}";
-    }
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	@Override
+	public String toString() {
+		return "Account [accountId=" + accountId + ", fullname=" + fullname + ", accountType=" + accountType
+				+ ", balance=" + balance + "]";
+	}
+
 }

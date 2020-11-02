@@ -1,7 +1,7 @@
 create database if not exists nacos
   default character set utf8
   default collate utf8_general_ci;
-
+  
 /******************************************/
 /*   数据库全名 = nacos_config   */
 /*   表名称 = config_info   */

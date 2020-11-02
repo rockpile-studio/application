@@ -7,11 +7,12 @@
         <id column="account_id" property="accountId" />
         <result column="fullname" property="fullname" />
         <result column="account_type" property="accountType" />
+        <result column="balance" property="balance" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        account_id, fullname, account_type
+        account_id, fullname, account_type, balance
     </sql>
 
 </mapper>
