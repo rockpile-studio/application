@@ -2,14 +2,12 @@ package studio.rockpile.application.model.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 /**
  * <p>
@@ -25,11 +23,11 @@ public class Payment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	// @JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "支付id")
 	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private Long id;
 
-	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "订单id")
 	private Long orderId;
 
