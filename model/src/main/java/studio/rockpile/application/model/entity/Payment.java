@@ -25,11 +25,11 @@ public class Payment implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "支付id")
 	@TableId(value = "id", type = IdType.ASSIGN_ID)
 	private Long id;
 
+	@JsonSerialize(using = ToStringSerializer.class)
 	@ApiModelProperty(value = "订单id")
 	private Long orderId;
 
