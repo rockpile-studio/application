@@ -2,7 +2,9 @@ package studio.rockpile.application.server.demo.controller;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,16 +46,29 @@ public class PaymentController {
 	@Value("${nacos.config.info}")
 	private String info;
 
+	@Value("${nacos.shared.config.info}")
+	private String sharedInfo;
+
+	@Value("${nacos.global.config.info}")
+	private String globalInfo;
+
+	@Value("${nacos.runtime.config.info}")
+	private String runtimeInfo;
+
 	@Autowired
 	private PaymentProvider paymentProvider;
 
 	// http://127.0.0.1:53011/payment/server/info
 	@GetMapping(value = "/server/info")
 	public CommonResult<?> serverPort() {
-		StringBuilder result = new StringBuilder("server(");
-		result.append(SpringContextUtil.getProperty("spring.application.name")).append(":");
-		result.append(serverPort).append(") info:\"").append(info).append("\"");
-		return CommonResult.succ(result.toString());
+		Map<String, String> params = new HashMap<>();
+		params.put("spring.application.name", SpringContextUtil.getProperty("spring.application.name"));
+		params.put("serverPort", serverPort);
+		params.put("nacos.config.info", info);
+		params.put("nacos.global.config.info", globalInfo);
+		params.put("nacos.runtime.config.info", runtimeInfo);
+		params.put("nacos.shared.config.info", sharedInfo);
+		return CommonResult.succ(params);
 	}
 
 	// http://127.0.0.1:53011/payment/create?orderId=5030166
@@ -75,13 +90,13 @@ public class PaymentController {
 		QueryWrapper<Payment> query = new QueryWrapper<>();
 		query.eq("order_id", orderId);
 		List<Payment> list = paymentProvider.list(query);
-		
-		if( ObjectUtils.isEmpty(list) ) {
+
+		if (ObjectUtils.isEmpty(list)) {
 			throw new NullPointerException("未查询到订单id对应的付款流水信息");
 		}
 		return CommonResult.succ(list);
 	}
-	
+
 	// http://127.0.0.1:30101/payment/query/page/order
 	@RequestMapping(value = "/query/page/order", method = RequestMethod.POST)
 	public CommonResult<Object> queryPageByOrderId(@RequestBody(required = true) QueryPageParam<Payment> queryPage) {
