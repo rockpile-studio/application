@@ -27,4 +27,6 @@ public class OrderController {
 		CommonResult<Object> payments = paymentService.queryByOrderId(orderId);
 		return payments;
 	}
+	
+	
 }
