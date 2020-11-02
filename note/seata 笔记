@@ -11,3 +11,17 @@ Resource Manager（RM）：资源管理器，管理分支事务的处理资源�
 3、RM向TC注册分支事务，将其纳入XID对全局事务的管辖。
 4、TM向TC发起针对XID的全局提交或回滚。
 5、TC调度XID下管辖的全部分支事务完成提交或回滚请求。
+
+执行nacos配置同步
+[root@localhost ~]# cd /opt/seata/conf
+[root@localhost conf]# ./nacos-config.sh 192.168.4.119
+
+启动seata
+Options: 
+--host, -h：The host to bind. 
+--port, -p：The port to listen. Default: 8091 
+--storeMode, -m：log store mode : file、db. Default: file 
+--help 
+[root@localhost seata]# sh ./bin/seata-server.sh -p 8091 -h 192.168.4.119 -m file
+ 
+ 
