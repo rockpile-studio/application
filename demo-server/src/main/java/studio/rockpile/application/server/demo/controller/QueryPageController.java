@@ -28,7 +28,7 @@ import studio.rockpile.application.server.demo.provider.OrderProvider;
  */
 @RestController
 @RequestMapping("/order")
-public class OrderController {
+public class QueryPageController {
 
 	@Autowired
 	private OrderProvider orderProvider;
