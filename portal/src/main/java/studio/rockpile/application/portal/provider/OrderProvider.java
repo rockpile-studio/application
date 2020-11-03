@@ -14,7 +14,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface OrderProvider extends IService<Order> {
 	// 创建订单
 	public void createOrder(Order order);
-
-	// 修改订单状态
-	public void updateOrderStatus(Long orderId, String status);
 }

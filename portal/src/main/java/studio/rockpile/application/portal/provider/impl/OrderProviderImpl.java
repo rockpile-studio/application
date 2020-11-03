@@ -5,7 +5,6 @@ import studio.rockpile.application.model.entity.Order;
 import studio.rockpile.application.portal.dao.OrderMapper;
 import studio.rockpile.application.portal.provider.OrderProvider;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
@@ -37,19 +36,6 @@ public class OrderProviderImpl extends ServiceImpl<OrderMapper, Order> implement
 		order.setOrderTime(Calendar.getInstance().getTime());
 		order.setStatus(OrderStatusEnum.SUBMIT.getKey());
 		orderMapper.insert(order);
-	}
-
-	@Override
-	public void updateOrderStatus(Long orderId, String status) {
-		Order order = new Order();
-		order.setStatus(status);
-		order.setOrderTime(Calendar.getInstance().getTime());
-
-		UpdateWrapper<Order> update = new UpdateWrapper<>();
-		update.eq("order_id", orderId);
-		update.eq("status", OrderStatusEnum.SUBMIT.getKey());
-		int rows = orderMapper.update(order, update);
-		logger.debug("... updateOrderStatus rows : {}", rows);
 	}
 
 }
