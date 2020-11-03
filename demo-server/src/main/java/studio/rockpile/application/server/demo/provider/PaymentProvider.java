@@ -15,7 +15,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-10-14
  */
 public interface PaymentProvider extends IService<Payment> {
+	// 使用mybatisplus原生的分页
+	public IPage<Payment> queryPageByOrderId(QueryPageParam<Payment> queryPage);
 
-	IPage<Payment> queryPageByOrderId(QueryPageParam<Payment> queryPage);
-
+	public void createPayment(Payment pay);
 }

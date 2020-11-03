@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import java.util.Calendar;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +42,14 @@ public class PaymentProviderImpl extends ServiceImpl<PaymentMapper, Payment> imp
 		logger.debug("总条数 = {}", paymentIPage.getTotal());
 		logger.debug("总页数 = {}", paymentIPage.getPages());
 		return paymentIPage;
+	}
+
+	@Override
+	public void createPayment(Payment payment) {
+		payment.setId(null);
+		payment.setPayTime(Calendar.getInstance().getTime());
+		payment.setFallback(false);
+		payment.setRemark("测试支付记录");
+		paymentMapper.insert(payment);
 	}
 }
