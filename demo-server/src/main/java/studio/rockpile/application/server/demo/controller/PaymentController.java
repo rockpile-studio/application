@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -70,9 +71,17 @@ public class PaymentController {
 		params.put("nacos.shared.config.info", sharedInfo);
 		return CommonResult.succ(params);
 	}
+	
+	@PostMapping(value = "/create")
+	public CommonResult<Object> create( @RequestBody Payment payment ) {
+		payment.setId(null);
+		payment.setFallback(false);
+		paymentProvider.save(payment);
+		return CommonResult.succ(payment);
+	}
 
-	// http://127.0.0.1:53011/payment/create?orderId=5030166
-	@GetMapping(value = "/create")
+	// http://127.0.0.1:53011/payment/create-by-order?orderId=5030166
+	@GetMapping(value = "/create-by-order")
 	public CommonResult<Object> create(@RequestParam(value = "orderId", required = true) Long orderId) {
 		Payment payment = new Payment();
 		payment.setOrderId(orderId);

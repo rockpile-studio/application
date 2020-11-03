@@ -15,5 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2020-10-16
  */
 public interface AccountProvider extends IService<Account> {
-	public	void updateBalance(Long accountId, BigDecimal amount);
+	public	void deductById(Long id, BigDecimal amount);
 }

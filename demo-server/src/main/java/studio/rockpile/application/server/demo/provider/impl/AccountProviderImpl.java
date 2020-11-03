@@ -3,6 +3,9 @@ package studio.rockpile.application.server.demo.provider.impl;
 import studio.rockpile.application.model.entity.Account;
 import studio.rockpile.application.server.demo.dao.AccountMapper;
 import studio.rockpile.application.server.demo.provider.AccountProvider;
+
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.math.BigDecimal;
@@ -23,13 +26,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccountProviderImpl extends ServiceImpl<AccountMapper, Account> implements AccountProvider {
 	private static final Logger logger = LoggerFactory.getLogger(AccountProviderImpl.class);
-	
+
 	@Autowired
 	private AccountMapper accountMapper;
 
 	@Override
-	public void updateBalance(Long accountId, BigDecimal amount) {
-		int rows = accountMapper.updateBalance(accountId, amount);
+	public void deductById(Long id, BigDecimal amount) {
+		UpdateWrapper<Account> wrapper = new UpdateWrapper<>();
+		wrapper.setSql("balance = balance-" + amount.toString());
+		wrapper.eq("account_id", id);
+		int rows = accountMapper.update(null, wrapper);
 		logger.debug("... updateBalance rows : {}", rows);
 	}
 }
