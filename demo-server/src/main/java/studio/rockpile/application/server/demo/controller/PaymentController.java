@@ -103,12 +103,13 @@ public class PaymentController {
 		if (ObjectUtils.isEmpty(list)) {
 			throw new NullPointerException("未查询到对应的付款流水信息");
 		}
-		
+
 		PageInfo<Payment> pageInfo = new PageInfo<>(list);
 		return CommonResult.succ(pageInfo);
 	}
 
 	// http://127.0.0.1:53011/payment/server/info
+	// 这里捕获异常，正常返回CommonResult(code=500)，不会触发sentinel的熔断器的计数，也不会触发seata异常的全局事务回滚
 	@GetMapping(value = "/server/info")
 	public CommonResult<?> serverPort() {
 		try {
@@ -127,22 +128,16 @@ public class PaymentController {
 	}
 
 	@PostMapping(value = "/create")
-	public CommonResult<?> create(@RequestBody Payment payment) {
-		try {
-			paymentProvider.create(payment);
-			return CommonResult.succ(payment);
-		} catch (Exception e) {
-			// 这里捕获异常，正常返回CommonResult(code=500)，不会触发sentinel的熔断器的计数
-			logger.error("支付流水创建失败：{}", e);
-			return CommonResult.error("支付流水创建失败：" + e.getMessage());
-		}
+	public CommonResult<?> create(@RequestBody Payment payment) throws Exception {
+		paymentProvider.create(payment);
+		return CommonResult.succ(payment);
 	}
 
 	// http://127.0.0.1:53011/payment/query-by-account/5030000
 	// @PathVariable传递参数的微服务，在sentinel中会按实际请求参数保存资源名/payment/query-by-account/5030000
 	@RequestMapping(value = "/query-by-account/{accountId}", method = RequestMethod.GET)
 	@SentinelResource(value = "queryPaymentByAccount")
-	public CommonResult<Object> queryByAccount(@PathVariable(value = "accountId") Long accountId) {
+	public CommonResult<Object> queryByAccount(@PathVariable(value = "accountId") Long accountId) throws Exception {
 		QueryWrapper<Payment> wrapper = new QueryWrapper<>();
 		wrapper.eq("account_id", accountId);
 		List<Payment> list = paymentProvider.list(wrapper);

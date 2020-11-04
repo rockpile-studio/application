@@ -9,8 +9,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.util.Calendar;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +27,7 @@ public class OrderProviderImpl extends ServiceImpl<OrderMapper, Order> implement
 
 	@Override
 	public void createOrder(Order order) {
-		order.setOrderId(null);
+		order.setId(null);
 		order.setOrderTime(Calendar.getInstance().getTime());
 		order.setStatus(OrderStatusEnum.SUBMIT.getKey());
 		orderMapper.insert(order);

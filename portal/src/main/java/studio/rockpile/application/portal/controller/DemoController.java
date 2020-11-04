@@ -20,20 +20,20 @@ public class DemoController {
 	private RestTemplate restTemplate;
 
 	// 测试restTemplate是否负载均衡
-	// http://127.0.0.1:53001/portal/demo/rest/load/balance
-	@RequestMapping(value = "/rest/load/balance", method = RequestMethod.GET)
+	// http://127.0.0.1:53001/portal/demo/rest/load-balance
+	@RequestMapping(value = "/rest/load-balance", method = RequestMethod.GET)
 	public CommonResult<?> testRestLoadBalance() {
 		String url = SpringContextUtil.getProperty("nacos.service.url.demo") + "/payment/server/info";
 		logger.debug("... url : {}", url);
 		return restTemplate.getForObject(url, CommonResult.class);
 	}
 
-	// http://127.0.0.1:53001/portal/demo/flow/limit/test
-	@RequestMapping(value = "/flow/limit/test", method = RequestMethod.GET)
+	// http://127.0.0.1:53001/portal/demo/test/flow-limit
+	@RequestMapping(value = "/test/flow-limit", method = RequestMethod.GET)
 	public CommonResult<?> testFlowLimit() {
 		StringBuilder message = new StringBuilder("application.name=");
-		message.append(SpringContextUtil.getProperty("spring.application.name")).append(",sentinel.transport.port=");
-		message.append(SpringContextUtil.getProperty("spring.cloud.sentinel.transport.port")).append(")");
+		message.append(SpringContextUtil.getProperty("spring.application.name")).append(",server.port=");
+		message.append(SpringContextUtil.getProperty("server.port")).append(")");
 		return CommonResult.succ(message.toString());
 	}
 }

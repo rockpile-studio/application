@@ -2,8 +2,6 @@ package studio.rockpile.application.server.demo.controller;
 
 import java.math.BigDecimal;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,7 +22,6 @@ import studio.rockpile.application.server.demo.provider.AccountProvider;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-	private static final Logger logger = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
 	private AccountProvider accountProvider;
@@ -32,13 +29,8 @@ public class AccountController {
 	// http://127.0.0.1:53011/account/deduct-by-id?id=xxx&amount=xxx
 	@RequestMapping(value = "/deduct-by-id", method = RequestMethod.GET)
 	public CommonResult<?> deductById(@RequestParam(value = "id", required = true) Long id,
-			@RequestParam(value = "amount", required = true) BigDecimal amount) {
-		try {
-			accountProvider.deductById(id, amount);
-			return CommonResult.succ("扣款成功");
-		} catch (Exception e) {
-			logger.error("账户扣款失败：{}", e);
-			return CommonResult.error("账户扣款失败：" + e.getMessage());
-		}
+			@RequestParam(value = "amount", required = true) BigDecimal amount) throws Exception {
+		accountProvider.deductById(id, amount);
+		return CommonResult.succ("扣款成功");
 	}
 }

@@ -21,8 +21,8 @@ import studio.rockpile.application.portal.service.demo.PaymentService;
 
 @RestController
 @RequestMapping("/transact")
-public class DistributeTransactDemoController {
-	private static final Logger logger = LoggerFactory.getLogger(DistributeTransactDemoController.class);
+public class TransactorDemoController {
+	private static final Logger logger = LoggerFactory.getLogger(TransactorDemoController.class);
 
 	@Autowired
 	private OrderProvider orderProvider;
@@ -33,7 +33,7 @@ public class DistributeTransactDemoController {
 	@Resource
 	private AccountService accountService;
 
-	// http://127.0.0.1:53001/portal/transact/order/submit?accountId=16030765335460
+	// http://127.0.0.1:53001/portal/transact/order/submit?accountId=5030000
 	@RequestMapping(value = "/order/submit", method = RequestMethod.GET)
 	public CommonResult<?> submitOrder(@RequestParam(value = "accountId", required = true) Long accountId) {
 		try {
@@ -45,7 +45,8 @@ public class DistributeTransactDemoController {
 
 			// 缴费记录
 			Payment payment = new Payment();
-			payment.setOrderId(order.getOrderId());
+			payment.setOrderId(order.getId());
+			payment.setAccountId(accountId);
 			payment.setAmount(order.getPrice());
 			paymentService.create(payment);
 
@@ -53,7 +54,7 @@ public class DistributeTransactDemoController {
 			accountService.deductById(accountId, order.getPrice());
 		} catch (Exception e) {
 			logger.error("订单提交分布式事务处理失败：{}", e);
-			CommonResult.error("订单提交分布式事务处理失败：" + e.getMessage());
+			return CommonResult.error("订单提交分布式事务处理失败：" + e.getMessage());
 		}
 		return CommonResult.succ("订单提交分布式事务处理成功");
 

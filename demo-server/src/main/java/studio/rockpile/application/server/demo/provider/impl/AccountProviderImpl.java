@@ -33,7 +33,7 @@ public class AccountProviderImpl extends ServiceImpl<AccountMapper, Account> imp
 	public void deductById(Long id, BigDecimal amount) throws Exception {
 		UpdateWrapper<Account> wrapper = new UpdateWrapper<>();
 		wrapper.setSql("balance = balance-" + amount.toString());
-		wrapper.eq("account_id", id);
+		wrapper.eq("id", id);
 		int rows = accountMapper.update(null, wrapper);
 		logger.debug("... updateBalance rows : {}", rows);
 	}
