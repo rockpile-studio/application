@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 缴费信息 服务实现类
+ * 支付 服务实现类
  * </p>
  *
  * @author rockpile
- * @since 2020-10-14
+ * @since 2020-11-04
  */
 @Service
 public class PaymentProviderImpl extends ServiceImpl<PaymentMapper, Payment> implements PaymentProvider {
@@ -32,12 +32,14 @@ public class PaymentProviderImpl extends ServiceImpl<PaymentMapper, Payment> imp
 	@Autowired
 	private PaymentMapper paymentMapper;
 
+	// mybatisplus原生的分页实现方案
 	@Override
-	public IPage<Payment> queryPageByOrderId( QueryPageParam<Payment> queryPage) {
+	public IPage<Payment> queryPageByOrder( QueryPageParam<Payment> query) throws Exception {
 		QueryWrapper<Payment> wrapper = new QueryWrapper<>();
-		wrapper.eq("order_id", queryPage.getQuery().getOrderId());
+		wrapper.eq("account_id", query.getQuery().getAccountId());
+		wrapper.eq("is_refund", false);
 
-		Page<Payment> page = new Page<>(queryPage.getPage().getCurrent(), queryPage.getPage().getSize());
+		Page<Payment> page = new Page<>(query.getPage().getCurrent(), query.getPage().getSize());
 		IPage<Payment> paymentIPage = paymentMapper.selectPage(page, wrapper);
 		logger.debug("总条数 = {}", paymentIPage.getTotal());
 		logger.debug("总页数 = {}", paymentIPage.getPages());
@@ -45,11 +47,10 @@ public class PaymentProviderImpl extends ServiceImpl<PaymentMapper, Payment> imp
 	}
 
 	@Override
-	public void createPayment(Payment payment) {
+	public void create(Payment payment) throws Exception {
 		payment.setId(null);
 		payment.setPayTime(Calendar.getInstance().getTime());
-		payment.setFallback(false);
-		payment.setRemark("测试支付记录");
+		payment.setRefund(false);
 		paymentMapper.insert(payment);
 	}
 }

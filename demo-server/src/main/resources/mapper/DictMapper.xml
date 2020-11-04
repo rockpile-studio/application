@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="studio.rockpile.application.model.entity.Dict">
-        <id column="dict_id" property="dictId" />
-        <result column="type" property="type" />
-        <result column="code" property="code" />
-        <result column="value" property="value" />
+        <id column="id" property="id" />
+        <result column="pid" property="pid" />
+        <result column="category" property="category" />
+        <result column="item_label" property="itemLabel" />
+        <result column="item_code" property="itemCode" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        dict_id, type, code, value
+        id, pid, category, item_label, item_code
     </sql>
 
 </mapper>

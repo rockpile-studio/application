@@ -1,77 +1,93 @@
 package studio.rockpile.application.model.entity;
 
+import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
-import java.math.BigDecimal;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 账户信息
+ * 账户
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @TableName("t_account")
-@ApiModel(value = "Account对象", description = "账户信息")
+@ApiModel(value="Account对象", description="账户")
 public class Account implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID=1L;
 
-	@ApiModelProperty(value = "账户id")
-	@TableId(value = "account_id", type = IdType.ASSIGN_ID)
-	private Long accountId;
+    @ApiModelProperty(value = "主键id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
-	@ApiModelProperty(value = "账户名")
-	private String fullname;
+    @ApiModelProperty(value = "账户名")
+    private String name;
 
-	@ApiModelProperty(value = "账户类型")
-	private Integer accountType;
+    @ApiModelProperty(value = "账户类型：1买家 2卖家")
+    private Integer type;
 
-	@ApiModelProperty(value = "账户余额")
-	private BigDecimal balance;
+    @ApiModelProperty(value = "账户余额")
+    private BigDecimal balance;
 
-	public Long getAccountId() {
-		return accountId;
-	}
+    @ApiModelProperty(value = "更新时间")
+    private Date updateTime;
 
-	public void setAccountId(Long accountId) {
-		this.accountId = accountId;
-	}
 
-	public String getFullname() {
-		return fullname;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getAccountType() {
-		return accountType;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setAccountType(Integer accountType) {
-		this.accountType = accountType;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public BigDecimal getBalance() {
-		return balance;
-	}
+    public Integer getType() {
+        return type;
+    }
 
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
-	@Override
-	public String toString() {
-		return "Account [accountId=" + accountId + ", fullname=" + fullname + ", accountType=" + accountType
-				+ ", balance=" + balance + "]";
-	}
+    public BigDecimal getBalance() {
+        return balance;
+    }
 
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+        "id=" + id +
+        ", name=" + name +
+        ", type=" + type +
+        ", balance=" + balance +
+        ", updateTime=" + updateTime +
+        "}";
+    }
 }

@@ -1,11 +1,11 @@
 package studio.rockpile.application.server.demo.controller;
 
-import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 import studio.rockpile.application.framework.protocol.CommonResult;
 import studio.rockpile.application.framework.protocol.QueryPageParam;
@@ -40,6 +42,7 @@ import studio.rockpile.application.server.demo.provider.PaymentProvider;
 @RefreshScope // 支持Nacos动态刷新配置
 @RequestMapping("/payment")
 public class PaymentController {
+	private static final Logger logger = LoggerFactory.getLogger(PaymentController.class);
 
 	@Value("${server.port}")
 	private String serverPort;
@@ -59,61 +62,94 @@ public class PaymentController {
 	@Autowired
 	private PaymentProvider paymentProvider;
 
+	// mybatisplus原生的分页实现方案
+	// http://127.0.0.1:53011/payment/query-by-account/page
+	// {"page":{"current":2,"size":2},"query":{"account_id":"5030000"}}
+	@RequestMapping(value = "/query-by-account/page", method = RequestMethod.POST)
+	public CommonResult<Object> queryPageByAccount(@RequestBody(required = true) QueryPageParam<Payment> query)
+			throws Exception {
+		IPage<Payment> result = paymentProvider.queryPageByOrder(query);
+
+		if (ObjectUtils.isEmpty(result.getRecords())) {
+			throw new NullPointerException("未查询到对应的付款流水信息");
+		}
+		return CommonResult.succ(result);
+	}
+
+	// pagehelper插件的分页实现方案
+	// PageInfo.list：结果集
+	// PageInfo.pageNum：当前页码
+	// PageInfo.pageSize：当前页面显示的数据条目
+	// PageInfo.pages：总页数
+	// PageInfo.total：数据的总条目数
+	// PageInfo.prePage：上一页
+	// PageInfo.nextPage：下一页
+	// PageInfo.isFirstPage：是否为第一页
+	// PageInfo.isLastPage：是否为最后一页
+	// PageInfo.hasPreviousPage：是否有上一页
+	// PageHelper.hasNextPage：是否有下一页
+	// http://127.0.0.1:53011/payment/query-by-account/pagehelper
+	// {"page":{"current":2,"size":2},"query":{"account_id":"5030000"}}
+	@RequestMapping(value = "/query-by-account/pagehelper", method = RequestMethod.POST)
+	public CommonResult<Object> queryPageHelperByAccount(@RequestBody(required = true) QueryPageParam<Payment> query) {
+		int current = query.getPage().getCurrent();
+		int size = query.getPage().getSize();
+		if (current > 0 && size > 0) {
+			PageHelper.startPage(current, size);
+		}
+		QueryWrapper<Payment> wrapper = new QueryWrapper<>();
+		wrapper.eq("account_id", query.getQuery().getAccountId());
+		List<Payment> list = paymentProvider.list(wrapper);
+		if (ObjectUtils.isEmpty(list)) {
+			throw new NullPointerException("未查询到对应的付款流水信息");
+		}
+		
+		PageInfo<Payment> pageInfo = new PageInfo<>(list);
+		return CommonResult.succ(pageInfo);
+	}
+
 	// http://127.0.0.1:53011/payment/server/info
 	@GetMapping(value = "/server/info")
 	public CommonResult<?> serverPort() {
-		Map<String, String> params = new HashMap<>();
-		params.put("spring.application.name", SpringContextUtil.getProperty("spring.application.name"));
-		params.put("serverPort", serverPort);
-		params.put("nacos.config.info", info);
-		params.put("nacos.global.config.info", globalInfo);
-		params.put("nacos.runtime.config.info", runtimeInfo);
-		params.put("nacos.shared.config.info", sharedInfo);
-		return CommonResult.succ(params);
+		try {
+			Map<String, String> params = new HashMap<>();
+			params.put("spring.application.name", SpringContextUtil.getProperty("spring.application.name"));
+			params.put("serverPort", serverPort);
+			params.put("nacos.config.info", info);
+			params.put("nacos.global.config.info", globalInfo);
+			params.put("nacos.runtime.config.info", runtimeInfo);
+			params.put("nacos.shared.config.info", sharedInfo);
+			return CommonResult.succ(params);
+		} catch (Exception e) {
+			logger.error("查询服务信息异常：{}", e);
+			return CommonResult.error("查询服务信息异常：" + e.getMessage());
+		}
 	}
-	
+
 	@PostMapping(value = "/create")
-	public CommonResult<Object> create( @RequestBody Payment payment ) {
-		payment.setId(null);
-		payment.setFallback(false);
-		paymentProvider.save(payment);
-		return CommonResult.succ(payment);
+	public CommonResult<?> create(@RequestBody Payment payment) {
+		try {
+			paymentProvider.create(payment);
+			return CommonResult.succ(payment);
+		} catch (Exception e) {
+			// 这里捕获异常，正常返回CommonResult(code=500)，不会触发sentinel的熔断器的计数
+			logger.error("支付流水创建失败：{}", e);
+			return CommonResult.error("支付流水创建失败：" + e.getMessage());
+		}
 	}
 
-	// http://127.0.0.1:53011/payment/create-by-order?orderId=5030166
-	@GetMapping(value = "/create-by-order")
-	public CommonResult<Object> create(@RequestParam(value = "orderId", required = true) Long orderId) {
-		Payment payment = new Payment();
-		payment.setOrderId(orderId);
-		payment.setAmount(new BigDecimal(100.126).setScale(2, BigDecimal.ROUND_DOWN));
-		payment.setPayTime(Calendar.getInstance().getTime());
-		payment.setRemark("测试支付记录");
-		payment.setFallback(false);
-		paymentProvider.save(payment);
-		return CommonResult.succ(payment);
-	}
-
-	// http://127.0.0.1:53011/payment/query/order/5030166
-	@RequestMapping(value = "/query/order/{orderId}", method = RequestMethod.GET)
-	public CommonResult<Object> queryByOrderId(@PathVariable(value = "orderId") Long orderId) {
-		QueryWrapper<Payment> query = new QueryWrapper<>();
-		query.eq("order_id", orderId);
-		List<Payment> list = paymentProvider.list(query);
+	// http://127.0.0.1:53011/payment/query-by-account/5030000
+	// @PathVariable传递参数的微服务，在sentinel中会按实际请求参数保存资源名/payment/query-by-account/5030000
+	@RequestMapping(value = "/query-by-account/{accountId}", method = RequestMethod.GET)
+	@SentinelResource(value = "queryPaymentByAccount")
+	public CommonResult<Object> queryByAccount(@PathVariable(value = "accountId") Long accountId) {
+		QueryWrapper<Payment> wrapper = new QueryWrapper<>();
+		wrapper.eq("account_id", accountId);
+		List<Payment> list = paymentProvider.list(wrapper);
 
 		if (ObjectUtils.isEmpty(list)) {
-			throw new NullPointerException("未查询到订单id对应的付款流水信息");
+			throw new NullPointerException("未查询到对应的付款流水信息");
 		}
 		return CommonResult.succ(list);
-	}
-
-	// http://127.0.0.1:30101/payment/query/page/order
-	@RequestMapping(value = "/query/page/order", method = RequestMethod.POST)
-	public CommonResult<Object> queryPageByOrderId(@RequestBody(required = true) QueryPageParam<Payment> queryPage) {
-		IPage<Payment> result = paymentProvider.queryPageByOrderId(queryPage);
-
-		if (ObjectUtils.isEmpty(result.getRecords())) {
-			throw new NullPointerException("未查询到订单id对应的付款流水信息");
-		}
-		return CommonResult.succ(result);
 	}
 }

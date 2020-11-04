@@ -35,10 +35,10 @@ public class AccountController {
 			@RequestParam(value = "amount", required = true) BigDecimal amount) {
 		try {
 			accountProvider.deductById(id, amount);
+			return CommonResult.succ("扣款成功");
 		} catch (Exception e) {
 			logger.error("账户扣款失败：{}", e);
-			CommonResult.error("账户扣款失败：" + e.getMessage());
+			return CommonResult.error("账户扣款失败：" + e.getMessage());
 		}
-		return CommonResult.succ("扣款成功");
 	}
 }

@@ -4,7 +4,7 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="studio.rockpile.application.model.entity.Order">
-        <id column="order_id" property="orderId" />
+        <id column="id" property="id" />
         <result column="price" property="price" />
         <result column="account_id" property="accountId" />
         <result column="order_time" property="orderTime" />
@@ -13,7 +13,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        order_id, price, account_id, order_time, status
+        id, price, account_id, order_time, status
     </sql>
 
 </mapper>

@@ -11,21 +11,21 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 订单信息
+ * 订单
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @TableName("t_order")
-@ApiModel(value="Order对象", description="订单信息")
+@ApiModel(value="Order对象", description="订单")
 public class Order implements Serializable {
 
     private static final long serialVersionUID=1L;
 
-    @ApiModelProperty(value = "订单id")
-    @TableId(value = "order_id", type = IdType.ASSIGN_ID)
-    private Long orderId;
+    @ApiModelProperty(value = "主键id")
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
@@ -36,16 +36,16 @@ public class Order implements Serializable {
     @ApiModelProperty(value = "下单时间")
     private Date orderTime;
 
-    @ApiModelProperty(value = "订单状态")
-    private String status;
+    @ApiModelProperty(value = "状态：1订单提交 2支付成功 3取消订单")
+    private Integer status;
 
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getId() {
+        return id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public BigDecimal getPrice() {
@@ -72,18 +72,18 @@ public class Order implements Serializable {
         this.orderTime = orderTime;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
     @Override
     public String toString() {
         return "Order{" +
-        "orderId=" + orderId +
+        "id=" + id +
         ", price=" + price +
         ", accountId=" + accountId +
         ", orderTime=" + orderTime +

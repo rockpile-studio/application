@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 字典信息 服务实现类
+ * 字典 服务实现类
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @Service
 public class DictProviderImpl extends ServiceImpl<DictMapper, Dict> implements DictProvider {

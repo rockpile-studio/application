@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 订单信息 服务实现类
+ * 订单 服务实现类
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @Service
 public class OrderProviderImpl extends ServiceImpl<OrderMapper, Order> implements OrderProvider {

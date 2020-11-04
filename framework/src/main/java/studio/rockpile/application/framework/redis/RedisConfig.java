@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 @Configuration
 @AutoConfigureAfter(RedisAutoConfiguration.class)
@@ -39,7 +41,9 @@ public class RedisConfig {
 				.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
 				.setSerializationInclusion(Include.NON_NULL).configure(SerializationFeature.INDENT_OUTPUT, false)
 				.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
-				.setVisibility(PropertyAccessor.ALL, Visibility.ANY);
+				.setVisibility(PropertyAccessor.ALL, Visibility.ANY)
+				.registerModule(new SimpleModule().addSerializer(Long.class, ToStringSerializer.instance)
+						.addSerializer(Long.TYPE, ToStringSerializer.instance));
 		valSerializer.setObjectMapper(jsonMapper);
 		redisTemplate.setValueSerializer(valSerializer);
 		redisTemplate.setHashValueSerializer(valSerializer);

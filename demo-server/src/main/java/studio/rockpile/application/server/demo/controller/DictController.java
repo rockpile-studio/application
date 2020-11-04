@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 字典信息 前端控制器
+ * 字典 前端控制器
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @RestController
 @RequestMapping("/dict")

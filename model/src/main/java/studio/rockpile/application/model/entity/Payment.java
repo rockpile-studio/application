@@ -2,6 +2,8 @@ package studio.rockpile.application.model.entity;
 
 import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,89 +13,96 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <p>
- * 缴费信息
+ * 支付
  * </p>
  *
  * @author rockpile
- * @since 2020-10-14
+ * @since 2020-11-04
  */
 @TableName("t_payment")
-@ApiModel(value = "Payment对象", description = "缴费信息")
+@ApiModel(value="Payment对象", description="支付")
 public class Payment implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID=1L;
 
-	// @JsonSerialize(using = ToStringSerializer.class)
-	@ApiModelProperty(value = "支付id")
-	@TableId(value = "id", type = IdType.ASSIGN_ID)
-	private Long id;
+    @ApiModelProperty(value = "主键id")
+    @JsonSerialize(using = ToStringSerializer.class)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    private Long id;
 
-	@ApiModelProperty(value = "订单id")
-	private Long orderId;
+    @ApiModelProperty(value = "订单id")
+    private Long orderId;
 
-	@ApiModelProperty(value = "支付金额")
-	private BigDecimal amount;
+    @ApiModelProperty(value = "账户id")
+    private Long accountId;
 
-	@ApiModelProperty(value = "备注")
-	private String remark;
+    @ApiModelProperty(value = "支付金额")
+    private BigDecimal amount;
 
-	@ApiModelProperty(value = "支付时间")
-	private Date payTime;
+    @ApiModelProperty(value = "付款时间")
+    private Date payTime;
 
-	@ApiModelProperty(value = "是否回退：0否(默认) 1是")
-	private Boolean isFallback;
+    @ApiModelProperty(value = "是否退款：0否 1是")
+    private Boolean isRefund;
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public Long getOrderId() {
-		return orderId;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setOrderId(Long orderId) {
-		this.orderId = orderId;
-	}
+    public Long getOrderId() {
+        return orderId;
+    }
 
-	public BigDecimal getAmount() {
-		return amount;
-	}
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
 
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
+    public Long getAccountId() {
+        return accountId;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public BigDecimal getAmount() {
+        return amount;
+    }
 
-	public Date getPayTime() {
-		return payTime;
-	}
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
 
-	public void setPayTime(Date payTime) {
-		this.payTime = payTime;
-	}
+    public Date getPayTime() {
+        return payTime;
+    }
 
-	public Boolean getFallback() {
-		return isFallback;
-	}
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
 
-	public void setFallback(Boolean isFallback) {
-		this.isFallback = isFallback;
-	}
+    public Boolean getRefund() {
+        return isRefund;
+    }
 
-	@Override
-	public String toString() {
-		return "Payment{" + "id=" + id + ", orderId=" + orderId + ", amount=" + amount + ", remark=" + remark
-				+ ", payTime=" + payTime + ", isFallback=" + isFallback + "}";
-	}
+    public void setRefund(Boolean isRefund) {
+        this.isRefund = isRefund;
+    }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+        "id=" + id +
+        ", orderId=" + orderId +
+        ", accountId=" + accountId +
+        ", amount=" + amount +
+        ", payTime=" + payTime +
+        ", isRefund=" + isRefund +
+        "}";
+    }
 }

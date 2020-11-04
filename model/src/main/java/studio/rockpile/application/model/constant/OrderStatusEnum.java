@@ -1,19 +1,17 @@
 package studio.rockpile.application.model.constant;
 
 public enum OrderStatusEnum {
-	SUBMIT("submit", "订单提交"),
-	SUCC("success", "支付成功"),
-	FAIL("fail", "支付失败");
-	
-	private final String key;
+	SUBMIT(1, "订单提交"), SUCCESS(2, "支付成功"), CANCEL(3, "取消订单");
+
+	private final Integer key;
 	private final String description;
 
-	OrderStatusEnum(final String key, final String description) {
+	OrderStatusEnum(final Integer key, final String description) {
 		this.key = key;
 		this.description = description;
 	}
 
-	public String getKey() {
+	public Integer getKey() {
 		return key;
 	}
 
@@ -21,10 +19,10 @@ public enum OrderStatusEnum {
 		return description;
 	}
 
-	public static OrderStatusEnum getType(String key) {
+	public static OrderStatusEnum getType(Integer key) {
 		OrderStatusEnum[] values = OrderStatusEnum.values();
 		for (OrderStatusEnum value : values) {
-			if (value.getKey().equals(key)) {
+			if (value.getKey() == key) {
 				return value;
 			}
 		}

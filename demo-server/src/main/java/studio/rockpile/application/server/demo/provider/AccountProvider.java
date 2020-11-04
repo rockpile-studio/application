@@ -8,12 +8,14 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 账户信息 服务类
+ * 账户 服务类
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 public interface AccountProvider extends IService<Account> {
-	public	void deductById(Long id, BigDecimal amount);
+
+	void deductById(Long id, BigDecimal amount) throws Exception;
+
 }

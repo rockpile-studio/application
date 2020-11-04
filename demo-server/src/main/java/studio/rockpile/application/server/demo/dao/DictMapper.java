@@ -22,22 +22,22 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface DictMapper extends BaseMapper<Dict> {
 
-	@Insert("insert into t_dict(dict_id, type, code, value)" + " values (#{dictId}, #{type}, #{code}, #{value})")
-	public int insert(@Param(value = "dictId") Long dictId, @Param(value = "type") String type,
-			@Param(value = "code") String code, @Param(value = "value") String value);
+	@Insert("insert into t_dict(id, category, item_label, item_code)" + " values (#{id}, #{category}, #{itemLabel}, #{itemCode})")
+	public int insert(@Param(value = "id") Long id, @Param(value = "category") String category,
+			@Param(value = "itemLabel") String label, @Param(value = "itemCode") String code);
 	
-	@Delete( "delete from t_dict where dict_id = #{id}" )
+	@Delete( "delete from t_dict where id = #{id}" )
 	public int deleteById( @Param(value = "id") Long id );
 	
 	// 公共表和分库分表的关联查询测试
 	@Select( "<script>"
-			+ "select * from t_account a, t_dict b"
-			+ " where a.account_type = b.code"
-			+ " and b.type = 'account_type'"
+			+ "select a.*, b.item_label from t_payment a, t_dict b"
+			+ " where b.item_code = '1'"
+			+ " and b.category = 'account_type'"
 			+ " and a.account_id in "
-			+ "<foreach collection='acctIds' item='acctId' open='(' separator=',' close=')'>"
-			+ "#{acctId}"
+			+ "<foreach collection='accountIds' item='accountId' open='(' separator=',' close=')'>"
+			+ "#{accountId}"
 			+ "</foreach>"
 			+ "</script>")
-	public List<Map<String, Object>> queryByAcctIds(@Param(value = "acctIds") List<Long> acctIds);
+	public List<Map<String, Object>> queryPaymentByAccountIds(@Param(value = "accountIds") List<Long> accountIds);
 }

@@ -4,7 +4,6 @@ import studio.rockpile.application.model.entity.Account;
 import studio.rockpile.application.server.demo.dao.AccountMapper;
 import studio.rockpile.application.server.demo.provider.AccountProvider;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
@@ -17,11 +16,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 账户信息 服务实现类
+ * 账户 服务实现类
  * </p>
  *
  * @author rockpile
- * @since 2020-10-16
+ * @since 2020-11-04
  */
 @Service
 public class AccountProviderImpl extends ServiceImpl<AccountMapper, Account> implements AccountProvider {
@@ -31,7 +30,7 @@ public class AccountProviderImpl extends ServiceImpl<AccountMapper, Account> imp
 	private AccountMapper accountMapper;
 
 	@Override
-	public void deductById(Long id, BigDecimal amount) {
+	public void deductById(Long id, BigDecimal amount) throws Exception {
 		UpdateWrapper<Account> wrapper = new UpdateWrapper<>();
 		wrapper.setSql("balance = balance-" + amount.toString());
 		wrapper.eq("account_id", id);

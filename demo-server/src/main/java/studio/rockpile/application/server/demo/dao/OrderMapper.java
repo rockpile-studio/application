@@ -27,18 +27,18 @@ public interface OrderMapper extends BaseMapper<Order> {
 	@Insert("insert into t_order(price, account_id, status)"
 	        + " values (#{price}, #{accountId}, #{status})")
 	public int insert(@Param(value = "price") BigDecimal price, @Param(value = "accountId") Long accountId,
-			@Param(value = "status") String status);
+			@Param(value = "status") Integer status);
 
 	// 根据id列表查询数据
 	// 当查询的id跨库或者跨表的时候，shardingjdbc会自动解析为查询多张表
 	@Select("<script>"
 			+ "select * from t_order"
-			+ " where order_id in "
+			+ " where id in "
 			+ "<foreach collection='ids' open='(' separator=',' close=')' item='id'>"
 			+ "#{id}"
 			+ "</foreach>"
 			+ " and account_id = #{accountId}"
 			+ "</script>")
-	public List<Map<String, Object>> queryByIds(@Param(value = "accountId") Long userId,
+	public List<Map<String, Object>> queryByIds(@Param(value = "accountId") Long accountId,
 			@Param(value = "ids") List<Long> ids);
 }

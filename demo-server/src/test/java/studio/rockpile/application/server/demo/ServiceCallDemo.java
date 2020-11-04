@@ -1,9 +1,6 @@
 package studio.rockpile.application.server.demo;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
@@ -12,18 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import studio.rockpile.application.DemoServer;
-import studio.rockpile.application.model.entity.Payment;
-import studio.rockpile.application.server.demo.provider.PaymentProvider;
+import studio.rockpile.application.model.entity.Account;
+import studio.rockpile.application.server.demo.provider.AccountProvider;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DemoServer.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ServiceCallDemo {
 	@Autowired
-	private PaymentProvider paymentProvider;
-	
+	private AccountProvider accountProvider;
+
 	@Autowired
 	private StringEncryptor encryptor;
 
@@ -32,8 +27,8 @@ public class ServiceCallDemo {
 	// jasypt同一个密钥（secretKey）对同一个内容执行加密，每次生成的密文都是不一样的，但是根据密文解密成原内容都是一致的
 	@Test
 	public void envPasswordEncryptor() {
-		String username = "linewell";
-		String password = "linewell";
+		String username = "rockpile";
+		String password = "rockpile";
 		System.out.println("username : " + encryptor.encrypt(username));
 		System.out.println("password : " + encryptor.encrypt(password));
 	}
@@ -41,23 +36,17 @@ public class ServiceCallDemo {
 	@Test
 	public void test() {
 		try {
-			Date ts = Calendar.getInstance().getTime();
-			Payment payment = new Payment();
-			payment.setOrderId(ts.getTime());
-			payment.setAmount(new BigDecimal(100.126).setScale(2, BigDecimal.ROUND_DOWN));
-			payment.setPayTime(ts);
-			payment.setRemark("测试支付记录");
-			payment.setFallback(false);
-			paymentProvider.save(payment);
+			Account account = new Account();
+			account.setId(5030000L);
+			account.setName("rockpile");
+			account.setType(1); // 买家
+			account.setBalance(new BigDecimal(100000).setScale(2, BigDecimal.ROUND_DOWN));
+			accountProvider.save(account);
+			System.out.println("insert t_account(5030000), update_time=" + account.getUpdateTime());
 
-			System.out.println("insert t_payment, PK=" + payment.getId());
-
-			QueryWrapper<Payment> query = new QueryWrapper<>();
-			query.eq("order_id", ts.getTime());
-			List<Payment> list = paymentProvider.list(query);
-			for (Payment one : list) {
-				System.out.println("... " + one);
-			}
+			account.setId(5030001L);
+			accountProvider.save(account);
+			System.out.println("insert t_account(5030001), update_time=" + account.getUpdateTime());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

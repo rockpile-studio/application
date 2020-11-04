@@ -4,15 +4,16 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="studio.rockpile.application.model.entity.Account">
-        <id column="account_id" property="accountId" />
-        <result column="fullname" property="fullname" />
-        <result column="account_type" property="accountType" />
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
         <result column="balance" property="balance" />
+        <result column="update_time" property="updateTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        account_id, fullname, account_type, balance
+        id, name, type, balance, update_time
     </sql>
 
 </mapper>

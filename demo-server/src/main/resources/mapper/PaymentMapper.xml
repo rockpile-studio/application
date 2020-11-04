@@ -6,15 +6,15 @@
     <resultMap id="BaseResultMap" type="studio.rockpile.application.model.entity.Payment">
         <id column="id" property="id" />
         <result column="order_id" property="orderId" />
+        <result column="account_id" property="accountId" />
         <result column="amount" property="amount" />
-        <result column="remark" property="remark" />
         <result column="pay_time" property="payTime" />
-        <result column="is_fallback" property="isFallback" />
+        <result column="is_refund" property="isRefund" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, order_id, amount, remark, pay_time, is_fallback
+        id, order_id, account_id, amount, pay_time, is_refund
     </sql>
 
 </mapper>
