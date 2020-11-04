@@ -148,23 +148,6 @@
 			<artifactId>sentinel-datasource-nacos</artifactId>
 		</dependency>
 
-		<!-- seata -->
-		<dependency>
-			<groupId>com.alibaba.cloud</groupId>
-			<artifactId>spring-cloud-starter-alibaba-seata</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>io.seata</groupId>
-					<artifactId>seata-all</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>io.seata</groupId>
-			<artifactId>seata-all</artifactId>
-			<version>1.0.0</version><!--$NO-MVN-MAN-VER$-->
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>

@@ -33,6 +33,7 @@ public class DistributeTransactDemoController {
 	@Resource
 	private AccountService accountService;
 
+	// http://127.0.0.1:53001/portal/transact/order/submit?accountId=16030765335460
 	@RequestMapping(value = "/order/submit", method = RequestMethod.GET)
 	public CommonResult<?> submitOrder(@RequestParam(value = "accountId", required = true) Long accountId) {
 		try {

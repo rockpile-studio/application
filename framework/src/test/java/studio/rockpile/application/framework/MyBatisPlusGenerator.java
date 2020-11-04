@@ -22,7 +22,7 @@ public class MyBatisPlusGenerator {
 		GlobalConfig globalConf = new GlobalConfig();
 		globalConf.setActiveRecord(false);
 		globalConf.setAuthor("rockpile");
-		globalConf.setOutputDir("D:/workstation/temporary/mybatis-generator/src");
+		globalConf.setOutputDir("E:\\server\\temporary\\mybatis-generator\\src");
 		globalConf.setSwagger2(true);
 		globalConf.setFileOverride(true);
 		globalConf.setIdType(IdType.ASSIGN_ID); // 主键生成策略
@@ -57,7 +57,7 @@ public class MyBatisPlusGenerator {
 			}
 		});
 
-		String[] tableNames = { "t_account", "t_order", "t_dict" };
+		String[] tableNames = { "t_account", "t_order", "t_dict", "t_payment" };
 
 		StrategyConfig strategyConf = new StrategyConfig();
 		strategyConf.setNaming(NamingStrategy.underline_to_camel);

@@ -5,7 +5,6 @@ import studio.rockpile.application.model.entity.Order;
 import studio.rockpile.application.portal.dao.OrderMapper;
 import studio.rockpile.application.portal.provider.OrderProvider;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import java.util.Calendar;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class OrderProviderImpl extends ServiceImpl<OrderMapper, Order> implements OrderProvider {
-	private final Logger logger = LoggerFactory.getLogger(OrderProviderImpl.class);
-
 	@Autowired
 	private OrderMapper orderMapper;
 
