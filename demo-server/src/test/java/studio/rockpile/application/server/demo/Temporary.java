@@ -2,7 +2,6 @@ package studio.rockpile.application.server.demo;
 
 import java.text.SimpleDateFormat;
 
-import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
@@ -36,6 +35,7 @@ public class Temporary {
 			StopWatch stopWatch = new StopWatch();
 			stopWatch.start(); // 开始时间
 			Long[] arr = new Long[300];
+			// mybatisplus.IdWorker 在4095个id以内，一批次取数耗时是相当的（300毫秒）
 			for( int i=0; i<300; i++ ) {
 				arr[i] = IdWorker.getId();
 			}
