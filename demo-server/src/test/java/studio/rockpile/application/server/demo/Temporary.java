@@ -2,8 +2,11 @@ package studio.rockpile.application.server.demo;
 
 import java.text.SimpleDateFormat;
 
+import org.assertj.core.util.Lists;
 import org.junit.Test;
+import org.springframework.util.StopWatch;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,6 +29,26 @@ public class Temporary {
 			.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"))
 			.registerModule(new SimpleModule().addSerializer(Long.class, ToStringSerializer.instance)
 					.addSerializer(Long.TYPE, ToStringSerializer.instance));
+	
+	@Test
+	public void getSnowFlakeId() {
+		try {
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start(); // 开始时间
+			Long[] arr = new Long[300];
+			for( int i=0; i<300; i++ ) {
+				arr[i] = IdWorker.getId();
+			}
+			stopWatch.stop(); // 截止时间
+			System.out.println("... 毫秒: " + stopWatch.getTotalTimeMillis() );
+			System.out.println("... 纳秒: " + stopWatch.getTotalTimeNanos() );
+			for (Long id : arr) {
+				System.out.print("," + id );
+			}
+		}catch ( Exception e ) {
+			e.printStackTrace();
+		}
+	}
 
 	@Test
 	public void objectToJson() {
