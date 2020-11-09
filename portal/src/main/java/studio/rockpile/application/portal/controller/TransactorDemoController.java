@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import studio.rockpile.application.framework.protocol.CommonResult;
 import studio.rockpile.application.model.entity.Order;
 import studio.rockpile.application.model.entity.Payment;
@@ -35,6 +36,7 @@ public class TransactorDemoController {
 
 	// http://127.0.0.1:53001/portal/transact/order/submit?accountId=5030000
 	@RequestMapping(value = "/order/submit", method = RequestMethod.GET)
+	@GlobalTransactional
 	public CommonResult<?> submitOrder(@RequestParam(value = "accountId", required = true) Long accountId) {
 		try {
 			// 提交订单
