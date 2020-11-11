@@ -14,6 +14,7 @@
 		<module>framework</module>
 		<module>demo-server</module>
 		<module>portal</module>
+		<module>gateway</module>
 	</modules>
 
 	<properties>
@@ -137,7 +138,8 @@
 
 			<!-- seata-1.2.0 -->
 			<!-- 使用分布式事务框架Seata，一次写SQL(Update)操作需要额外执行： -->
-			<!-- 全局事务XID(TC通讯)、Before Image(解析SQL+查询DB)、After Image(查询DB)、Insert undo_log、Before Commit(TC通讯+判断锁冲突) -->
+			<!-- 全局事务XID(TC通讯)、Before Image(解析SQL+查询DB)、After Image(查询DB)、Insert undo_log、Before 
+				Commit(TC通讯+判断锁冲突) -->
 			<!-- 这些操作都需要附加一次远程RPC通讯，而且是同步的，另外undo_log写入时blob字段的插入性能也不高 -->
 			<!-- 每条写SQL粗略估计会增加5倍的开销时间 -->
 			<!-- 所以在业务设计时，尽可能通过微服务的内聚，实现事务一致性，尽可能少用Seata -->
