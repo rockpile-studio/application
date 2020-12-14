@@ -6,10 +6,13 @@ import org.jasypt.encryption.StringEncryptor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import studio.rockpile.application.DemoServer;
+import studio.rockpile.application.framework.util.SpringContextUtil;
 import studio.rockpile.application.model.entity.Account;
 import studio.rockpile.application.server.demo.provider.AccountProvider;
 
